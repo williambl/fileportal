@@ -3,13 +3,25 @@ import socket
 import hashlib
 import json
 import sys
+import encryption
+from cryptography.hazmat.primitives import serialization
 
 def recv(ip):
+    private_key = encryption.get_key()
+
     s = socket.socket()
 
     s.connect((ip, 25565))
 
-    metajson = s.recv(1024).decode('utf-8')
+    public_key = encryption.get_public_key()
+
+    s.send(public_key.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    ))
+
+    encryptedmetajson = s.recv(1024)
+    metajson = encryption.decrypt(private_key, encryptedmetajson).decode('utf-8')
     metadata = json.loads(metajson)
     filename = metadata['filename']
     size = metadata['size']
@@ -30,7 +42,7 @@ def recv(ip):
     while True:
         data = s.recv(1024)
         if (len(data)):
-            f.write(data)
+            f.write(encryption.decrypt(private_key, data))
         else:
             break
 

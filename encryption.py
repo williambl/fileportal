@@ -40,7 +40,7 @@ def get_public_key():
     if (not os.path.exists(os.path.expanduser('~/.fileportal/key_rsa.pem'))):
         return None
 
-    return key.public_key()
+    return get_key().public_key()
 
 def encrypt(public_key, message):
     return public_key.encrypt(
