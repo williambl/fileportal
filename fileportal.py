@@ -11,4 +11,4 @@ if (response == "send"):
     send(ip, path)
 elif (response == "recv"):
     ip = input("Where from?")
-    recv(ip, path)
+    recv(ip)

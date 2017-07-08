@@ -1,6 +1,6 @@
 import socket
 
-def recv(ip, path):
+def recv(ip):
     s = socket.socket()
 
     s.connect((ip, 25565))
