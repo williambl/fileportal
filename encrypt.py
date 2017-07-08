@@ -1,6 +1,8 @@
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
 import os
 
 def new_key():
@@ -25,9 +27,6 @@ def get_key():
     if (not os.path.exists(os.path.expanduser('~/.fileportal/key_rsa.pem'))):
         return None
 
-    if (key):
-        return key
-
     with open(os.path.expanduser('~/.fileportal/key_rsa.pem'), "rb") as f:
         key = serialization.load_pem_private_key(
             f.read(),
@@ -42,3 +41,23 @@ def get_public_key():
         return None
 
     return key.public_key()
+
+def encrypt(public_key, message):
+    return public_key.encrypt(
+        message,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA1()),
+            algorithm=hashes.SHA1(),
+            label=None
+        )
+    )
+
+def decrypt(private_key, message):
+    return private_key.decrypt(
+        message,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA1()),
+            algorithm=hashes.SHA1(),
+            label=None
+        )
+    )
