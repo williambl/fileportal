@@ -13,7 +13,7 @@ def recv(ip, path):
     print('Got connection from', addr)
 
     while True:
-        data = csocket.recv(1024)
+        data = csocket.recv()
         if (len(data)):
             f.write(data)
         else:

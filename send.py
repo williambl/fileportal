@@ -9,7 +9,7 @@ def send(ip, path):
 
     while True:
         print('Sending...')
-        data = f.read(1024)
+        data = f.read()
         if (len(data)):
             s.send(data)
         else:
