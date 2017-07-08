@@ -5,9 +5,9 @@ print("Welcome to fileportal!")
 
 response = input("Send or recv?")
 
-if (response == "send"):
+if (response.upper() in ["SEND", "S"]):
     path = input("Which file?")
     send(path)
-elif (response == "recv"):
+elif (response.upper() in ["RECV", "RECEIVE", "R"]):
     ip = input("Where from?")
     recv(ip)
