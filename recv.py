@@ -3,21 +3,16 @@ import socket
 def recv(ip, path):
     s = socket.socket()
 
-    s.bind(('', 25565))
+    s.connect((ip, 25565))
 
-    f = open(path, 'wb')
-
-    s.listen(5)
-
-    csocket, addr = s.accept()
-    print('Got connection from', addr)
+    f = open(path,'wb')
 
     while True:
-        data = csocket.recv()
+        data = s.recv(1024)
         if (len(data)):
             f.write(data)
         else:
             break
 
             f.close()
-            csocket.close()
+            s.close()

@@ -1,19 +1,21 @@
 import socket
 
 def send(ip, path):
+    f = open(path, 'rb')
+
     s = socket.socket()
-    s.connect((ip, 25565))
+    s.bind(('', 25565))
+    s.listen(5)
 
-
-    f = open(path,'rb')
+    csocket, addr = s.accept()
+    print('Got connection from', addr)
 
     while True:
-        print('Sending...')
-        data = f.read()
+        data = f.read(1024)
         if (len(data)):
-            s.send(data)
+            csocket.send(data)
         else:
             break
 
             f.close()
-            s.close()
+            csocket.close()
