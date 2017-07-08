@@ -1,22 +1,15 @@
-import socket
+from send import send
+from recv import recv
 
-s = socket.socket()
+print("Welcome to fileportal!")
 
-s.bind((socket.gethostname(), 25565))
+response = input("Send or recv?")
 
-f = open('recv', 'wb')
-
-s.listen(5)
-
-csocket, addr = s.accept()
-print('Got connection from', addr)
-
-while True:
-    data = csocket.recv(1024)
-    if (len(data)):
-        f.write(data)
-    else:
-        break
-
-f.close()
-csocket.close()
+if (response == "send"):
+    path = input("Which file?")
+    ip = input("Where to?")
+    send(ip, path)
+elif (response == "recv"):
+    ip = input("Where from?")
+    path = input("To what file?")
+    recv(ip, path)
