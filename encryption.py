@@ -3,6 +3,8 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
+from cryptography.fernet import Fernet
+import tempfile
 import os
 
 def new_key():
@@ -61,3 +63,29 @@ def decrypt(private_key, message):
             label=None
         )
     )
+
+def get_fernet_key():
+    return Fernet.generate_key()
+
+def encrypt_file(key, f):
+    text = f.read()
+    print(text)
+    fnt = Fernet(key)
+    encrypted = fnt.encrypt(text)
+    print(encrypted)
+    tf = tempfile.TemporaryFile()
+    tf.write(encrypted)
+    return tf
+
+def decrypt_file(key, f):
+    encrypted = f.read()
+    print(encrypted)
+    fnt = Fernet(key)
+    text = fnt.decrypt(encrypted)
+    print(text)
+    return text
+
+def decrypt_fernet(key, token):
+    print(token)
+    fnt = Fernet(key)
+    return fnt.decrypt(token)

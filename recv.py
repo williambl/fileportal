@@ -26,8 +26,8 @@ def recv(ip):
     filename = metadata['filename']
     size = metadata['size']
     checksum = metadata['checksum']
+    fernet_key = metadata['fernet_key'].encode('utf-8')
 
-    f = open(filename, 'wb')
 
     if (input("Recieve " + filename + ", a " + str(size) + "byte file? [Y/n] \n").upper()
         in ['N', 'NO']):
@@ -39,15 +39,20 @@ def recv(ip):
 
     s.send("send it".encode('utf-8'))
 
+    encryptedtoken = b""
+
     while True:
         data = s.recv(1024)
         if (len(data)):
-            f.write(encryption.decrypt(private_key, data))
+            encryptedtoken += data
         else:
             break
 
-            f.close()
             s.close()
+
+    with open(filename, 'w+b') as f:
+        f.truncate(0)
+        f.write(encryption.decrypt_fernet(fernet_key, encryptedtoken))
 
     f = open(filename, 'rb')
     if (sha256(f.read()).hexdigest() != checksum):

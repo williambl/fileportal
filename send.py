@@ -4,10 +4,12 @@ import json
 import sys
 import os
 import encryption
+from io import StringIO
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 
 def send(path):
+    fernet_key = encryption.get_fernet_key()
 
     s = socket.socket()
     s.bind(('', 25565))
@@ -21,8 +23,10 @@ def send(path):
     public_key = serialization.load_pem_public_key(public_key_encoded, default_backend())
 
     with open(path, 'rb') as f:
-        metadata = {'filename': os.path.basename(path), 'size': os.path.getsize(path),
-                    'checksum': sha256(f.read()).hexdigest()}
+        metadata = {'filename': os.path.basename(path),
+                    'size': os.path.getsize(path),
+                    'checksum': sha256(f.read()).hexdigest(),
+                    'fernet_key': fernet_key.decode('utf-8')}
     metajson = json.dumps(metadata)
     print(metajson)
 
@@ -31,6 +35,7 @@ def send(path):
     csocket.send(encryptedmetajson)
 
     f = open(path, 'rb')
+    token = StringIO(encryption.encrypt_file(fernet_key, f))
 
     while True:
         message = csocket.recv(1024).decode('utf-8')
@@ -42,11 +47,11 @@ def send(path):
             sys.exit()
 
     while True:
-        data = f.read(1024)
+        data = token.read(1024)
         if (len(data)):
-            csocket.send(encryption.encrypt(public_key, data))
+            csocket.send(data)
         else:
             break
 
-            f.close()
+            tf.close()
             csocket.close()
