@@ -3,7 +3,7 @@ import socket
 def recv(ip, path):
     s = socket.socket()
 
-    s.bind((socket.gethostname(), 25565))
+    s.bind((''), 25565))
 
     f = open(path, 'wb')
 
