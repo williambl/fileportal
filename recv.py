@@ -14,7 +14,7 @@ def recv(ip):
 
     f = open(filename, 'wb')
 
-    if (input("Recieve " + filename + ", a " + size + "byte file? [Y/n] \n").upper()
+    if (input("Recieve " + filename + ", a " + str(size) + "byte file? [Y/n] \n").upper()
         in ['N', 'NO']):
         print('Abort.')
         s.send("nosend".encode('utf-8'))

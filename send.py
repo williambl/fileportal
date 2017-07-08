@@ -1,6 +1,7 @@
 import socket
 import json
 import sys
+import os
 
 def send(ip, path):
     f = open(path, 'rb')
@@ -12,7 +13,7 @@ def send(ip, path):
     csocket, addr = s.accept()
     print('Got connection from', addr)
 
-    metadata = {'filename': f.name, 'size': str(f.__sizeof__())}
+    metadata = {'filename': f.name, 'size': os.path.getsize(path)}
     metajson = json.dumps(metadata)
     print(metajson)
 
