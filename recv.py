@@ -1,5 +1,6 @@
 import socket
 import json
+import sys
 
 def recv(ip):
     s = socket.socket()
@@ -12,6 +13,13 @@ def recv(ip):
     size = metadata['size']
 
     f = open(filename, 'wb')
+
+    if (input("Recieve " + filename + ", a " + size + "byte file? [Y/n] \n").upper()
+        in ['N', 'NO']):
+        print('Abort.')
+        s.send("nosend".encode('utf-8'))
+        sys.exit()
+
 
 
     s.send("send it".encode('utf-8'))

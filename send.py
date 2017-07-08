@@ -1,5 +1,6 @@
 import socket
 import json
+import sys
 
 def send(ip, path):
     f = open(path, 'rb')
@@ -18,7 +19,13 @@ def send(ip, path):
     csocket.send(metajson.encode('utf-8'))
 
     while True:
-        if (csocket.recv(1024).decode('utf-8') == "send it"): break
+        message = csocket.recv(1024).decode('utf-8')
+        if (message == "send it"):
+            break
+        elif (message == "nosend"):
+            f.close()
+            csocket.close()
+            sys.exit()
 
     while True:
         data = f.read(1024)
