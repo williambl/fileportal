@@ -11,5 +11,4 @@ if (response == "send"):
     send(ip, path)
 elif (response == "recv"):
     ip = input("Where from?")
-    path = input("To what file?")
     recv(ip, path)
