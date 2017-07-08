@@ -4,7 +4,7 @@ import json
 import sys
 import os
 
-def send(ip, path):
+def send(path):
 
     s = socket.socket()
     s.bind(('', 25565))
