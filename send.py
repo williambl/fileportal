@@ -1,4 +1,5 @@
 import socket
+import json
 
 def send(ip, path):
     f = open(path, 'rb')
@@ -10,7 +11,11 @@ def send(ip, path):
     csocket, addr = s.accept()
     print('Got connection from', addr)
 
-    csocket.send(f.name.encode('utf-8'))
+    metadata = {'filename': f.name, 'size': str(f.__sizeof__())}
+    metajson = json.dumps(metadata)
+    print(metajson)
+
+    csocket.send(metajson.encode('utf-8'))
 
     while True:
         if (csocket.recv(1024).decode('utf-8') == "send it"): break
