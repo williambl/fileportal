@@ -1,4 +1,6 @@
+from hashlib import sha256
 import socket
+import hashlib
 import json
 import sys
 
@@ -11,6 +13,7 @@ def recv(ip):
     metadata = json.loads(metajson)
     filename = metadata['filename']
     size = metadata['size']
+    checksum = metadata['checksum']
 
     f = open(filename, 'wb')
 
@@ -33,3 +36,8 @@ def recv(ip):
 
             f.close()
             s.close()
+
+    f = open(filename, 'rb')
+    if (sha256(f.read()).hexdigest() != checksum):
+        print("WARNING! Something happened to the file! Checksums do not match!")
+        print(sha256(repr(f.read).encode('utf-8')).hexdigest())
