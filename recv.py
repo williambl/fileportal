@@ -5,6 +5,7 @@ import json
 import sys
 import encryption
 from cryptography.hazmat.primitives import serialization
+from hurry import filesize
 
 def recv(ip):
     private_key = encryption.get_key()
@@ -31,8 +32,10 @@ def recv(ip):
     fernet_key = metadata['fernet_key'].encode('utf-8')
 
 
-    if (input("Recieve " + filename + ", a " + str(size) + "byte file? [Y/n] \n").upper()
-        in ['N', 'NO']):
+    if (input("Recieve " + filename + ", a " + filesize.size(
+        size, system = filesize.alternative) + "byte file? [Y/n] \n").upper() in
+        ['N', 'NO']):
+        
         print('Abort.')
         s.send("nosend".encode('utf-8'))
         upnp_handler.close_port(u, 25565)
