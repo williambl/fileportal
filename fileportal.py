@@ -1,5 +1,9 @@
 from send import send
 from recv import recv
+from encryption import *
+
+if (not key_exists()):
+    new_key()
 
 print("Welcome to fileportal!")
 

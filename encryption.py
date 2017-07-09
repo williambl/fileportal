@@ -38,6 +38,9 @@ def get_key():
 
     return key
 
+def key_exists():
+    return os.path.exists(os.path.expanduser('~/.fileportal/key_rsa.pem'))
+
 def get_public_key():
     if (not os.path.exists(os.path.expanduser('~/.fileportal/key_rsa.pem'))):
         return None
