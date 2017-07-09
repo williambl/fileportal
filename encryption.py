@@ -69,23 +69,21 @@ def get_fernet_key():
 
 def encrypt_file(key, f):
     text = f.read()
-    print(text)
     fnt = Fernet(key)
     encrypted = fnt.encrypt(text)
-    print(encrypted)
     tf = tempfile.TemporaryFile()
     tf.write(encrypted)
+    tf.seek(0)
     return tf
 
 def decrypt_file(key, f):
     encrypted = f.read()
-    print(encrypted)
-    fnt = Fernet(key)
-    text = fnt.decrypt(encrypted)
-    print(text)
-    return text
+    decrypt_fernet(key, encrypted)
+    tf = tempfile.NamedTemporaryFile()
+    tf.write(encrypted)
+    tf.seek(0)
+    return tf
 
 def decrypt_fernet(key, token):
-    print(token)
     fnt = Fernet(key)
     return fnt.decrypt(token)
