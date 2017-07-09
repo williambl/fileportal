@@ -8,6 +8,8 @@ from cryptography.hazmat.primitives import serialization
 
 def recv(ip):
     private_key = encryption.get_key()
+    u = upnp_handler.new_upnp()
+    upnp_handler.forward_port(u, 25565)
 
     s = socket.socket()
 
@@ -33,6 +35,7 @@ def recv(ip):
         in ['N', 'NO']):
         print('Abort.')
         s.send("nosend".encode('utf-8'))
+        upnp_handler.close_port(u, 25565)
         sys.exit()
 
 
@@ -49,6 +52,7 @@ def recv(ip):
             break
 
             s.close()
+            upnp_handler.close_port(u, 25565)
 
     with open(filename, 'w+b') as f:
         f.truncate(0)

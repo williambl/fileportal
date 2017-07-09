@@ -7,9 +7,12 @@ import encryption
 from io import StringIO
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
+import upnp_handler
 
 def send(path):
     fernet_key = encryption.get_fernet_key()
+    u = upnp_handler.new_upnp()
+    upnp_handler.forward_port(u, 25565)
 
     s = socket.socket()
     s.bind(('', 25565))
@@ -44,6 +47,7 @@ def send(path):
         elif (message == "nosend"):
             f.close()
             csocket.close()
+            upnp_handler.close_port(u, 25565)
             sys.exit()
 
     while True:
@@ -55,3 +59,4 @@ def send(path):
 
             token.close()
             csocket.close()
+            upnp_handler.close_port(u, 25565)
