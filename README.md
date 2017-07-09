@@ -4,3 +4,4 @@ A simple file-sharing program.
 # Dependencies:
  - cryptography
  - miniupnpc
+ - hurry.filesize
