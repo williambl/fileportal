@@ -34,8 +34,8 @@ def send(path):
 
     csocket.send(encryptedmetajson)
 
-    f = open(path, 'rb')
-    token = encryption.encrypt_file(fernet_key, f)
+    with open(path, 'rb') as f:
+        token = encryption.encrypt_file(fernet_key, f)
 
     while True:
         message = csocket.recv(1024).decode('utf-8')
@@ -53,5 +53,5 @@ def send(path):
         else:
             break
 
-            tf.close()
+            token.close()
             csocket.close()
